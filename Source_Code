@@ -1,0 +1,45 @@
+#Import the necessary libraries
+import pandas as pd
+import numpy as np
+
+#Read the file
+stacey = pd.read_csv(r'xxxxxxx.csv')
+
+#Check the columns
+print(stacey.columns)
+print(stacey.shape)
+print(stacey.head(2))
+
+#We know that the number of rows is 12136, lets see how many are unique
+print(stacey['FUZE Project ID - Check'].nunique())
+#There are 12136 unique values for FUZE
+print(stacey['Fuze Project Link - ST'].nunique())
+#There are 11,214 unique values for ST from stacey
+missing_values = (12136 - 11214)
+print('There are ' + str(missing_values) + ' values missing')
+
+#Checking if there are any duplicates - 2421571 has 6 occurances in ST
+id_counts_ST = stacey['Fuze Project Link - ST'].value_counts()
+id_counts_FUZE = stacey['FUZE Project ID - Check'].value_counts()
+
+
+List1 = stacey['Fuze Project Link - ST']
+List2= stacey['FUZE Project ID - Check']
+stacey.dtypes
+
+check = all(item in List1 for item in List2)
+#Just writing a little check for the lists to make sure there are values that are different
+if check is True:
+    print("The list {} contains all the elements of the list {}".format(List1, List2))
+else:
+    print("No, List1 doesnt have all elements of List2")
+#Creating a main list to check what values from my list1 are not in my list2
+#List1 and List2 were the two columns in my initial dataframe
+main_list = np.setdiff1d(List1, List2)
+
+#Showing the elements in List1 that are NOT in List2
+print(main_list)
+
+#Exporting my main_list to an excel file
+df = pd.DataFrame(main_list).T
+df.to_excel(excel_writer = "C:/Users/stipecl/Desktop/Data/Stacey_ST_Match/Stacey_Results.xlsx")
